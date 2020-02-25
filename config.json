@@ -1,0 +1,41 @@
+{
+	"event": "CyberChallenge Final 2020",
+
+	"TEAM-TOKEN": "eFMC6rVQalJiA6AS",
+	"TEAM-IP": "10.0.5.1",
+
+	"MASTER-SERVER-proto": "http",
+	"MASTER-SERVER-ip": "127.0.0.1",
+	"MASTER-SERVER-port": 12345,
+	"MASTER-SERVER-url": "/master-server-simulator.php",
+
+	"challenges": [
+		{
+			"name": "cc_market",
+			"category": "pwn-reversing",
+			"port": 12345
+		},
+		{
+			"name": "maze",
+			"category": "web-crypto",
+			"port": 80
+		}
+	],
+
+	"teams": [
+		{
+			"name": "Unimi",
+			"ip": "10.0.2.1"
+		},
+		{
+			"name": "Unilink",
+			"ip": "10.0.3.1"
+		},
+		{
+			"name": "Unirm1",
+			"ip": "10.0.4.1"
+		}
+	]
+
+
+}
