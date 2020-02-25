@@ -1,0 +1,91 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<h1>{% block title %}New team{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+{% include 'components/flask-messages.html' %}
+{% endif %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-6 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+            <div class="card">
+                <div class="card-header primary">
+                    Add a new team
+                </div>
+                <div class="card-content mt-2 container">
+
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="team_name">Team name</label>
+                            <input type="text" class="form-control" id="team_name" name="team_name"
+                                   aria-describedby="teamNameHelp" placeholder="univpm">
+                            <small id="teamNameHelp" class="form-text text-muted">Enter the team name.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="team_ip">IP</label>
+                            <input type="text" name="team_ip" class="form-control" id="team_ip"
+                                   aria-describedby="teamIpHelp" placeholder="10.10.10.1">
+                            <small id="teamIpHelp" class="form-text text-muted">Enter the team IP.</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large mb-3 width-100">Add team</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+
+            <ul class="list-group">
+                {% if not TEAMS_DATA | length %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                <span class="h3">
+                  No teams present.
+                </span>
+                </li>
+
+                {% else %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                    <span class="h4">Teams</span>
+                </li>
+
+
+                {% for team in TEAMS_DATA %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ team["name"] }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ team["ip"] }}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+
+                {% endif %}
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

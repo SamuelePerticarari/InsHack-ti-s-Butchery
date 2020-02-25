@@ -1,0 +1,199 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<h1>{% block title %}New patch{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+{% include 'components/flask-messages.html' %}
+{% endif %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-4 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+            <div class="card">
+                <div class="card-header primary">
+                    Add a new patch
+                </div>
+                <div class="card-content mt-2 container">
+
+                    <form method="post" enctype="multipart/form-data" class="validate">
+
+                        <div class="form-group">
+
+                            <label for="challenge_id">Challenge</label>
+                            <select class="form-control custom-select" name="challenge_id" id="challenge_id" required>
+                                {% for challenge in CHALLENGES_DATA %}
+                                <option value="{{ challenge['id'] }}"> {{ challenge['name'] }}:{{ challenge['port'] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patch_name">Patch name</label>
+                            <input type="text" name="patch_name" class="form-control" id="patch_name"
+                                   aria-describedby="patchNameHelp" placeholder="Best exploit">
+                            <small id="patchNameHelp" class="form-text text-muted">Enter the patch name (optional).
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patch_version">Patch version</label>
+                            <input type="text" name="patch_version" class="form-control" id="patch_version"
+                                   aria-describedby="patchVersionHelp" placeholder="1.0" required>
+                            <small id="patchVersionHelp" class="form-text text-muted">Enter the patch version.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patch_description">Patch description</label>
+                            <textarea class="form-control" name="patch_description" id="patch_description" rows="3"
+                                      aria-describedby="patchDescriptionHelp" placeholder="Patch buffer overflow flaw."
+                                      required></textarea>
+                            <small id="patchDescriptionHelp" class="form-text text-muted">Enter the patch description.
+                            </small>
+                        </div>
+
+                        <div class="custom-file">
+                            <label class="custom-file-label" for="patch_files">Patch files</label>
+                            <input type="file" class="custom-file-input" id="patch_files" name="patch_files[]"
+                                   aria-describedby="patchFilesHelp" multiple="" required>
+                            <small id="patchFilesHelp" class="form-text text-muted">Choose the patch files.</small>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary btn-large mb-3 mt-3 width-100">Upload patch
+                        </button>
+
+                    </form>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-8 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+
+            <ul class="list-group">
+                {% if not CHALLENGES_DATA | length %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                <span class="h3">
+                  No challenges present.
+                </span>
+                </li>
+                <li class="list-group-item">
+                    <a class="h5 white-text" href="{{ url_for('challenges.add_challenge') }}">
+                        Add a challenge before uploading a patch.
+                    </a>
+                </li>
+
+                {% else %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                    <span class="h4">Patches</span>
+                </li>
+
+                <li class="list-group-item">
+                    <table class="table table-bordered text-center mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">
+                                Challenge
+                            </th>
+                            <th scope="col">
+                                Version
+                            </th>
+                            <th scope="col">
+                                Description
+                            </th>
+                            <th scope="col">
+                                Files
+                            </th>
+                            <th scope="col">
+                                Owner
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        {% for patch in PATCHES_DATA %}
+
+                        {% if not patch["patches"] | length %}
+
+                        <tr>
+                            <td>
+                                {{ patch["challenge_name"] }}:{{ patch["challenge_port"] }}
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                -
+                            </td>
+                        </tr>
+
+                        {% else %}
+
+                        {% for single_patch in patch["patches"] %}
+
+                        <tr>
+                            <td>
+                                {{ patch["challenge_name"] }}:{{ patch["challenge_port"] }}
+                            </td>
+                            <td>
+                                {{ single_patch["version"] }}
+                            </td>
+                            <td>
+                                {{ single_patch["description"] }}
+                            </td>
+                            <td>
+                                {% for path in single_patch['path'].split('-_-*+*-_-') %}
+                                <form action="{{ url_for('base.get_file') }}" method="post" class="width-100">
+                                    <input type="hidden" name="path" value="{{ path }}">
+                                    <input type="submit" name="" value="{{ path[24:] }}" class="btn btn-primary">
+                                </form>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {{ single_patch["owner"] }}
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                        {% endif %}
+
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </li>
+
+                {% endif %}
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

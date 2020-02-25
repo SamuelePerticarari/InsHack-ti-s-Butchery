@@ -1,0 +1,133 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<h1>{% block title %}Patches{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<div class="flash">
+    {{ message }}
+</div>
+{% endif %}
+
+<div class="row">
+
+    <div class="col-md-10 offset-md-1 mb-5 mt-2">
+
+        <ul class="list-group">
+            {% if not CHALLENGES_DATA | length %}
+
+            <li class="list-group-item active disabled" aria-disabled="true">
+              <span class="h3">
+                No challenges present.
+              </span>
+            </li>
+            <li class="list-group-item">
+                <a class="h5 white-text" href="{{ url_for('challenges.add_challenge') }}">
+                    Add a challenge to be able to upload a patch.
+                </a>
+            </li>
+
+            {% else %}
+
+            <li class="list-group-item active disabled" aria-disabled="true">
+                <span class="h4">Patches</span>
+            </li>
+
+            <li class="list-group-item">
+                <table class="table table-bordered text-center mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            Challenge
+                        </th>
+                        <th scope="col">
+                            Version
+                        </th>
+                        <th scope="col">
+                            Description
+                        </th>
+                        <th scope="col">
+                            Files
+                        </th>
+                        <th scope="col">
+                            Owner
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    {% for patch in PATCHES_DATA %}
+
+                    {% if not patch["patches"] | length %}
+
+                    <tr>
+                        <td>
+                            {{ patch["challenge_name"] }}:{{ patch["challenge_port"] }}
+                        </td>
+                        <td>
+                            -
+                        </td>
+                        <td>
+                            -
+                        </td>
+                        <td>
+                            -
+                        </td>
+                        <td>
+                            -
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    {% for single_patch in patch["patches"] %}
+
+                    <tr>
+                        <td>
+                            {{ patch["challenge_name"] }}:{{ patch["challenge_port"] }}
+                        </td>
+                        <td>
+                            {{ single_patch["version"] }}
+                        </td>
+                        <td>
+                            {{ single_patch["description"] }}
+                        </td>
+                        <td>
+                            {% for path in single_patch['path'].split('-_-*+*-_-') %}
+                            <form action="{{ url_for('base.get_file') }}" method="post" class="width-100">
+                                <input type="hidden" name="path" value="{{ path }}">
+                                <input type="submit" name="" value="{{ path[24:] }}" class="btn btn-primary">
+                            </form>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ single_patch["owner"] }}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </li>
+
+            {% endif %}
+
+
+        </ul>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

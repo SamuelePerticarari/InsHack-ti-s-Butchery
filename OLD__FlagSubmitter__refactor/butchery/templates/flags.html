@@ -1,0 +1,80 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<h1>{% block title %}Flags{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+<div class="flash">
+    {{ message }}
+</div>
+{% endif %}
+
+<div class="row">
+
+    <div class="col-md-12 mb-5 mt-2">
+
+
+        <ul class="list-group">
+            {% if not FLAGS_DATA | length %}
+
+            <li class="list-group-item active disabled" aria-disabled="true">
+          <span class="h3">
+            No flags present.
+          </span>
+            </li>
+
+            {% else %}
+
+            <li class="list-group-item active disabled" aria-disabled="true">
+                <span class="h4">Flags</span>
+            </li>
+
+            <li class="list-group-item">
+
+                <table class="table table-bordered text-center mt-3">
+                    <tr class="border-my-td padding-5">
+                        <td> Id</td>
+                        <td> Challenge name</td>
+                        <td> Team</td>
+                        <td> Submitted</td>
+                        <td> Timestamp</td>
+                        <td> Exploit owner</td>
+                        <td> Exploit version</td>
+                        <td> Flag</td>
+                    </tr>
+
+                    {% for flag_data in FLAGS_DATA %}
+                    <tr class="padding-5">
+                        <td> {{ flag_data['id'] }}</td>
+                        <td> {{ flag_data['challenge_name'] }}</td>
+                        <td> {{ flag_data['team_name'] }}</td>
+                        <td>
+                            {% if flag_data['submitted'] == 1 %}
+                            <span class="badge badge-success">Sent</span>
+                            {% else %}
+                            <span class="badge badge-danger">Not sent</span>
+                            {% endif %}
+                        </td>
+                        <td> {{ flag_data['timestamp'] }}</td>
+                        <td> {{ flag_data['exploit_owner'] }}</td>
+                        <td> {{ flag_data['exploit_version'] }}</td>
+                        <td> {{ flag_data['flag'] }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </li>
+
+            {% endif %}
+
+        </ul>
+
+    </div>
+
+</div>
+
+{% endblock %}

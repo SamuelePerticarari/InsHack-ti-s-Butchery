@@ -1,0 +1,109 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<h1>{% block title %}New challenge{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+{% include 'components/flask-messages.html' %}
+{% endif %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-6 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+            <div class="card">
+                <div class="card-header primary">
+                    Add a new challenge
+                </div>
+                <div class="card-content mt-2 container">
+
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="challenge_name">Challenge name</label>
+                            <input type="text" class="form-control" id="challenge_name" name="challenge_name"
+                                   aria-describedby="challengeNameHelp" placeholder="cc_market">
+                            <small id="challengeNameHelp" class="form-text text-muted">Enter the challenge name.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="challenge_port">Challenge port</label>
+                            <input type="number" name="challenge_port" class="form-control" id="challenge_port"
+                                   max="65535" aria-describedby="challengePortHelp" placeholder="8080">
+                            <small id="challengePortHelp" class="form-text text-muted">Enter the challenge port.</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large mb-3 width-100">Add challenge</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6 offset-xs-1 col-sx-10 mb-5 mt-2">
+
+
+            <ul class="list-group">
+                {% if not CHALLENGES_DATA | length %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                <span class="h3">
+                  No challenges present.
+                </span>
+                </li>
+
+                {% else %}
+
+                <li class="list-group-item active disabled" aria-disabled="true">
+                    <span class="h4">Challenges</span>
+                </li>
+
+                <li class="list-group-item">
+                    <table class="table table-bordered text-center mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">
+                                Id
+                            </th>
+                            <th scope="col">
+                                Name
+                            </th>
+                            <th scope="col">
+                                Port
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for challenge in CHALLENGES_DATA %}
+                        <tr>
+                            <td>
+                                {{ challenge["id"] }}
+                            </td>
+                            <td>
+                                {{ challenge["name"] }}
+                            </td>
+                            <td>
+                                {{ challenge["port"] }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </li>
+                {% endif %}
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

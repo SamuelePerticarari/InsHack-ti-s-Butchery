@@ -1,0 +1,85 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+  <h1>{% block title %}Challenges{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-md-10 offset-md-1 mb-5 mt-2">
+
+
+      <ul class="list-group">
+        {% if not CHALLENGES_DATA | length %}
+
+            <li class="list-group-item active disabled" aria-disabled="true">
+              <span class="h3">
+                No challenges present.
+              </span>
+            </li>
+
+        {% else %}
+
+          <li class="list-group-item active disabled" aria-disabled="true">
+            <span class="h4">Challenges</span>
+          </li>
+
+          <li class="list-group-item">
+            <table class="table table-bordered text-center mt-3">
+              <thead>
+                <tr>
+                  <th scope="col">
+                    Id
+                  </th>
+                  <th scope="col">
+                    Name
+                  </th>
+                  <th scope="col">
+                    Port
+                  </th>
+                  <th scope="col" class="col-3">
+                    Delete
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for challenge in CHALLENGES_DATA %}
+                    <tr>
+                      <td>
+                        {{ challenge["id"] }}
+                      </td>
+                      <td>
+                        {{ challenge["name"] }}
+                      </td>
+                      <td>
+                        {{ challenge["port"] }}
+                      </td>
+                      <td>
+                        <a href="/challenges/delete/{{ challenge[0] }}" class="btn btn-danger" >
+                          <i class="fas fa-trash-alt"></i>
+                          Delete
+                        </a>
+                      </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </li>
+        {% endif %}
+
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+{% endblock %}

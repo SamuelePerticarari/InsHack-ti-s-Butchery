@@ -1,0 +1,53 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+  <h1>{% block title %}Dashboard{% endblock %}</h1>
+{% endblock %}
+
+
+<div class="row">
+
+  <div class="col-md-6">
+    <h1>
+      Lista team
+    </h1>
+    <a href="{{ url_for('teams.add_team') }}">Aggiungi team</a>
+
+    {% if not TEAMS_DATA | length %}
+
+      <p>Nessun team presente...</p>
+
+    {% else %}
+
+    <table class="width-100 text-center">
+      <tr class="border-my-td padding-5">
+        <td> Stato </td>
+        <td> Nome </td>
+        <td> IP </td>
+      </tr>
+
+      {% for team in TEAMS_DATA %}
+      <tr class="padding-5">
+        <td class="width-25">
+          <form action="{{ url_for('teams.toggle_team') }}" method="post" >
+            <input type="hidden" name="id_team" value="{{ team[3] }}">
+            {% if team[2] %}
+              <input type="submit" value="UP" class="width-100" style="color: white; background-color: green; font-weight: bolder;">
+            {% else %}
+              <input type="submit" value="DOWN" class="width-100" style="color: white; background-color: red; font-weight: bolder;">
+            {% endif %}
+          </form>
+        </td>
+        <td> {{ team[0] }} </td>
+        <td> {{ team[1] }} </td>
+      </tr>
+      {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+  </div>
+
+
+</div>
